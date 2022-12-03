@@ -128,19 +128,11 @@ const MyCollection = () => {
         <h3 className="text-3xl font-black">My Grids</h3>
         <CreateGridBtn />
       </div>
-      {/*<InfiniteScroll*/}
-      {/*    dataLength={listState.list.length}*/}
-      {/*    next={getUserCollectionsDetails}*/}
-      {/*    hasMore={listState.total == null || listState.list.length < listState.total}*/}
-      {/*    className="my-8 grid grid-flow-row gap-6 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"*/}
-      {/*    loader={'loading...'}*/}
-      {/*>*/}
       <div className="my-8 grid grid-flow-row gap-6 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {collectionAddresses.map((c) => (
           <Card collection={c} />
         ))}
       </div>
-      {/*</InfiniteScroll>*/}
     </div>
   );
 };

@@ -121,7 +121,7 @@ function Card(props: {
                 className="retro-btn w-full"
                 onClick={() => navigate(`/collection/${collection}`)}
               >
-                Complete&nbsp;Grid
+                Work&nbsp;on&nbsp;Grid
               </button>
           ) : (
             <code className="leading-5 text-xs text-error">
