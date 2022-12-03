@@ -34,6 +34,8 @@ function Card(props: {
         COLLECTION_ABI as ContractInterface,
         signer
       );
+      fetchMints()
+          .catch((error) => console.error('failed to fetch mints: ', error));
       const M = (await collectionContract.M()).toString();
       const N = (await collectionContract.N()).toString();
       const owner = await collectionContract.Owner();

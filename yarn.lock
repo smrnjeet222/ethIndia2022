@@ -969,36 +969,36 @@
     superstruct "^0.14.2"
     tweetnacl "^1.0.3"
 
-"@tanstack/query-core@4.19.0":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.19.0.tgz#be1ad7bfbc4edb68e21ab2a86dd4c52233a40c87"
-  integrity sha512-q+4GvS05nG2UXDE4ng0NU5SQNhT+VqhRTLNVtgVw1tIKJfG3CyYQpP/JwAdzMB7NEqC8L5oo9NAaORxEQN53dg==
+"@tanstack/query-core@4.19.1":
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-4.19.1.tgz#2e92d9e8a50884eb231c5beb4386e131ebe34306"
+  integrity sha512-Zp0aIose5C8skBzqbVFGk9HJsPtUhRVDVNWIqVzFbGQQgYSeLZMd3Sdb4+EnA5wl1J7X+bre2PJGnQg9x/zHOA==
 
-"@tanstack/query-persist-client-core@4.19.0":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-4.19.0.tgz#66337a7aeb259da5fb396dbedf012a3ef7f75a7a"
-  integrity sha512-gbbD8+eiJ5EZppXA/IKMRLMIkGwozYsadUBBr0PCzZ1+J9KLicgs38C8PWoNKun6w9HaQD/PZaahlMTUKl4cHA==
+"@tanstack/query-persist-client-core@4.19.1":
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-persist-client-core/-/query-persist-client-core-4.19.1.tgz#e473859ee07d281e6da5f213bf4cddb58dfa738f"
+  integrity sha512-Tlx9tgeYMDoJ5w8O79TXx85Bk46LDQLvojdjWzQbzKWPIEtvwK6OmG2Z3zxz6qEA3FiVmG0BYjsVMsT6PZOhGg==
 
 "@tanstack/query-sync-storage-persister@^4.14.5":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-4.19.0.tgz#632fdfb9a69f5dd2084ff3bf64e14bb7d0b2e8ba"
-  integrity sha512-E8kYCFYvG8jhx0Ck6O1vz7ZVrao1IKuah3Pr23WcVAIuHegZQG55Ut2ll2fHFuhWaCGEQDF8Av49ddbJJtDaqQ==
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-sync-storage-persister/-/query-sync-storage-persister-4.19.1.tgz#d8e182506dfed65b70dcd3b806261881cc62cc9d"
+  integrity sha512-gY8rDi6XJ4zPgPF8wEsryu8a87+E9vIByXWryoVO0ucKJzgjVLFNargPSZcMMvRsVw7nhyDCCd/nZZgW+Z3C9g==
   dependencies:
-    "@tanstack/query-persist-client-core" "4.19.0"
+    "@tanstack/query-persist-client-core" "4.19.1"
 
 "@tanstack/react-query-persist-client@^4.14.5":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-4.19.0.tgz#d342a3e5304ff1864fe07465090512a81f05fb76"
-  integrity sha512-ybRu73AGGT2GaMHEq/K1f9Zt6sGaiKDPyt2J31c4B6eVTjPqRmoP/zbFbwXcM+7HgFbaOIO9lY5JkJEeYJyBwA==
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query-persist-client/-/react-query-persist-client-4.19.1.tgz#8cab5776d2ac4e3134f2022f21797655b0dbd474"
+  integrity sha512-uNHCBfK7YiNXTjlO3B/Rym7HrNX6OnrcWIw3iiuGFK+gC566/BB3lcLHvriHwanxbnFvWiua8g9hvddeXVQzeA==
   dependencies:
-    "@tanstack/query-persist-client-core" "4.19.0"
+    "@tanstack/query-persist-client-core" "4.19.1"
 
 "@tanstack/react-query@^4.14.5":
-  version "4.19.0"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.19.0.tgz#353169522ff2e6dcfcc36c95ba4c151974a7ec92"
-  integrity sha512-gP4kmfQ3BvCYxTxA/3Xf0P24iNgW539Thk89KzP7X+i+EvFiWhEUMl1NtuI87bFrVEBHs+1ColFNimDidBh/Ww==
+  version "4.19.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-4.19.1.tgz#43356dd537127e76d75f5a2769eb23dafd9a3690"
+  integrity sha512-5dvHvmc0vrWI03AJugzvKfirxCyCLe+qawrWFCXdu8t7dklIhJ7D5ZhgTypv7mMtIpdHPcECtCiT/+V74wCn2A==
   dependencies:
-    "@tanstack/query-core" "4.19.0"
+    "@tanstack/query-core" "4.19.1"
     use-sync-external-store "^1.2.0"
 
 "@typechain/ethers-v5@10.1.1":
@@ -1859,9 +1859,9 @@ camelize@^1.0.0:
   integrity sha512-dU+Tx2fsypxTgtLoE36npi3UqcjSSMNYfkqgmoEhtZrraP5VWq0K7FkWVTYa8eMPtnU/G2txVsfdCJTn9uzpuQ==
 
 caniuse-lite@^1.0.30001400, caniuse-lite@^1.0.30001426:
-  version "1.0.30001435"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001435.tgz#502c93dbd2f493bee73a408fe98e98fb1dad10b2"
-  integrity sha512-kdCkUTjR+v4YAJelyiDTqiu82BDr4W4CP5sgTA0ZBmqn30XfS2ZghPLMowik9TPhS+psWJiUNxsqLyurDbmutA==
+  version "1.0.30001436"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001436.tgz#22d7cbdbbbb60cdc4ca1030ccd6dea9f5de4848b"
+  integrity sha512-ZmWkKsnC2ifEPoWUvSAIGyOYwT+keAaaWPHiQ9DfMqS1t6tfuyFYoWR78TeZtznkEQ64+vGXH9cZrElwR2Mrxg==
 
 carbites@^1.0.6:
   version "1.0.6"
