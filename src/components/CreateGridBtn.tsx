@@ -46,7 +46,7 @@ function CreateGridBtn() {
     await setBaseUriTx.wait();
 
     setLoading(false);
-    // window.location.reload();
+    window.location.reload();
   };
   return (
     <>
