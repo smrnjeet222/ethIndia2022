@@ -1,7 +1,8 @@
 import { Contract, ContractInterface } from "ethers";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useAccount } from "wagmi";
 import { FACTORY_ADDRESS } from "../App";
+import COLLECTION_ABI from "../collection_abi.json";
 import FACTORY_ABI from "../factory_abi.json";
 
 function CreateGridBtn() {
@@ -10,22 +11,40 @@ function CreateGridBtn() {
 
   const handleForm = async (e: any) => {
     e.preventDefault();
-    setLoading(true)
+    setLoading(true);
     let { name, sym, m, n } = e.target;
     [name, sym, m, n] = [name.value, sym.value, m.value, n.value];
 
     console.log({ name, sym, m, n });
 
     const signer = await connector?.getSigner();
-    
-    const contract = new Contract(FACTORY_ADDRESS, FACTORY_ABI as ContractInterface, signer);
 
-    const createTx = await contract.createCollection(name, sym, m, n)
+    const contract = new Contract(
+      FACTORY_ADDRESS,
+      FACTORY_ABI as ContractInterface,
+      signer
+    );
 
-    await createTx.wait(1);
+    const createTx = await contract.createCollection(name, sym, m, n);
 
-    console.log(createTx);
-  
+    const txReceipt = await createTx.wait();
+
+    const collectionAddress = (
+      (txReceipt.events || []).find(
+        (e: { event: string }) => e.event === "CollectionCreated"
+      ) || { args: { Collection: null } }
+    ).args?.Collection;
+
+    const collectionContract = new Contract(
+      collectionAddress,
+      COLLECTION_ABI as ContractInterface,
+      signer
+    );
+
+    const setBaseUriTx = await collectionContract.setBaseURI(`demo.com`)
+
+    await setBaseUriTx.wait();
+
     setLoading(false);
     // window.location.reload();
   };
@@ -88,7 +107,10 @@ function CreateGridBtn() {
             </label>
 
             <div className="modal-action justify-center">
-              <button type="submit" className={`btn btn-wide ${loading && "loading"}`}>
+              <button
+                type="submit"
+                className={`btn btn-wide ${loading && "loading"}`}
+              >
                 Create
               </button>
             </div>

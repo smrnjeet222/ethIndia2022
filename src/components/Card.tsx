@@ -33,6 +33,10 @@ function Card({ collection }: any) {
     })();
   }, [collection]);
 
+  const handleForkIt = async (e: any) => {
+    e.preventDefault();
+  }
+
   return (
     <Link
       to={`/collection/blahblah`}
@@ -55,7 +59,7 @@ function Card({ collection }: any) {
           </p>
 
           <button
-            onClick={(e) => e.preventDefault()}
+            onClick={handleForkIt}
             className="retro-btn w-full"
           >
             Fork it !!!
