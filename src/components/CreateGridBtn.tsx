@@ -1,7 +1,7 @@
 import { Contract, ContractInterface } from "ethers";
 import { useState } from "react";
 import { useAccount } from "wagmi";
-import { FACTORY_ADDRESS } from "../App";
+import { FACTORY_ADDRESS } from "../constants";
 import COLLECTION_ABI from "../contracts/collection_abi.json";
 import FACTORY_ABI from "../contracts/factory_abi.json";
 
