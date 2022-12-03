@@ -66,27 +66,7 @@ function Card(props: {
     })();
   }, [collection, refetchTrigger]);
 
-  const handleCompleteCollection = async (e: any) => {
-    e.preventDefault();
-    setLoading(true);
-    const signer = await connector?.getSigner();
 
-    const collectionContract = new Contract(
-      collection,
-      COLLECTION_ABI as ContractInterface,
-      signer
-    );
-
-    try {
-      const completeTx = await collectionContract.complete();
-      await completeTx.wait();
-      setRefetchTrigger((p) => !p);
-    } catch (err) {
-      console.error(err);
-    }
-
-    setLoading(false);
-  };
 
   return (
     <div

@@ -28,6 +28,25 @@ function GridDetails() {
     setMints(resp.data.mints);
   };
 
+  const handleCompleteCollection = async (e: any) => {
+    e.preventDefault();
+    if (!collectionId) return;
+    const signer = await connector?.getSigner();
+
+    const collectionContract = new Contract(
+      collectionId,
+      COLLECTION_ABI as ContractInterface,
+      signer
+    );
+
+    try {
+      const completeTx = await collectionContract.complete();
+      await completeTx.wait();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     if (!collectionId) return;
     try {
@@ -65,15 +84,25 @@ function GridDetails() {
 
   return (
     <div className="container m-auto my-4">
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${data.M}, 1fr)`,
-        gridTemplateRows: `repeat(${data.M}, 1fr)`
-      }}
-      className="max-h-full"
+      {data.owner === address && (
+        <div className="flex justify-center my-4 mb-8">
+          <button className="retro-btn" onClick={handleCompleteCollection}>
+            Complete Grid
+          </button>
+        </div>
+      )}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: `repeat(${data.M}, 1fr)`,
+          gridTemplateRows: `repeat(${data.M}, 1fr)`,
+        }}
+        className="mx-auto w-2/3"
       >
         {[...Array(Number(data.M) * Number(data.N)).keys()].map((i) => (
-          <div key={i} className="border border-black p-5 aspect-square">{i + 1}</div>
+          <div key={i} className="border border-black p-5 aspect-square">
+            {i + 1}
+          </div>
         ))}
       </div>
     </div>
