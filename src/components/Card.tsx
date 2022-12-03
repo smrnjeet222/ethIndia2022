@@ -1,3 +1,4 @@
+import axios from "axios";
 import { Contract, ContractInterface } from "ethers";
 import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
@@ -20,6 +21,21 @@ function Card(props: {
   const [refetchTrigger, setRefetchTrigger] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [mints, setMints] = useState<any[]>([])
+
+  const fetchMints = async () => {
+    const resp = await axios.post('', {
+      query: `{
+        mints(where: { collection_: {  id: "${collection}" } }) {
+          id
+          tokenId
+        }
+      }`,
+      variables: null,
+    });
+
+    setMints(resp.data.mints);
+  }
 
   useEffect(() => {
     if (Name) {
@@ -101,9 +117,14 @@ function Card(props: {
           ) : address === data.owner ? (
             <button
               className="retro-btn w-full"
-              onClick={handleCompleteCollection}
+              onClick={(e) => {
+                if (!mints.length) {
+                  return navigate(`/collection/${collection}`);
+                }
+                handleCompleteCollection(e);
+              }}
             >
-              Complete Grid
+              {mints.length ? 'Complete Grid' : 'Upload More'}
             </button>
           ) : (
             <code className="leading-5 text-xs text-error">
