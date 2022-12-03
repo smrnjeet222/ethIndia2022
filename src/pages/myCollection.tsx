@@ -10,7 +10,6 @@ import CFABI from '../contracts/factory_abi.json';
 // import MulticallABI from '../contracts/multicall.json';
 import { FACTORY_ADDRESS, MULTICALL_ADDRESS } from "../constants";
 import Card from "../components/Card";
-import {hex_to_ascii} from "../utils";
 
 import CreateGridBtn from "../components/CreateGridBtn";
 
