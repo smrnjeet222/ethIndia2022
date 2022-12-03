@@ -21,6 +21,21 @@ function Card(props: {
   const [refetchTrigger, setRefetchTrigger] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [mints, setMints] = useState<any[]>([])
+
+  const fetchMints = async () => {
+    const resp = await axios.post('https://api.thegraph.com/subgraphs/name/yashthakor/eth-india-grid1', {
+      query: `{
+        mints(where: { collection_: {  id: "${collection}" } }) {
+          id
+          tokenId
+        }
+      }`,
+      variables: null,
+    });
+
+    setMints(resp.data.mints);
+  }
 
   useEffect(() => {
     if (Name) {
