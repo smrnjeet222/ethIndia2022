@@ -21,21 +21,6 @@ function Card(props: {
   const [refetchTrigger, setRefetchTrigger] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [mints, setMints] = useState<any[]>([])
-
-  const fetchMints = async () => {
-    const resp = await axios.post('', {
-      query: `{
-        mints(where: { collection_: {  id: "${collection}" } }) {
-          id
-          tokenId
-        }
-      }`,
-      variables: null,
-    });
-
-    setMints(resp.data.mints);
-  }
 
   useEffect(() => {
     if (Name) {
@@ -115,17 +100,12 @@ function Card(props: {
           ) : data.minted ? (
             <ForkItBtn collection={collection} />
           ) : address === data.owner ? (
-            <button
-              className="retro-btn w-full"
-              onClick={(e) => {
-                if (!mints.length) {
-                  return navigate(`/collection/${collection}`);
-                }
-                handleCompleteCollection(e);
-              }}
-            >
-              {mints.length ? 'Complete Grid' : 'Upload More'}
-            </button>
+              <button
+                className="retro-btn w-full"
+                onClick={() => navigate(`/collection/${collection}`)}
+              >
+                Complete&nbsp;Grid
+              </button>
           ) : (
             <code className="leading-5 text-xs text-error">
               Grid is not yet completed by the owner.

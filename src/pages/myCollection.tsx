@@ -1,43 +1,50 @@
-import {useCallback, useEffect, useState} from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
-import {Contract, utils} from 'ethers';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { Contract, utils } from "ethers";
+import InfiniteScroll from "react-infinite-scroll-component";
 
-import { Factory_abi, Multicall } from '../contracts/types';
-import CFABI from '../contracts/factory_abi.json';
-import CABI from '../contracts/collection_abi.json';
-import MulticallABI from '../contracts/multicall.json';
+import { Factory_abi, Multicall } from "../contracts/types";
+import CFABI from "../contracts/factory_abi.json";
+import CABI from "../contracts/collection_abi.json";
+import MulticallABI from "../contracts/multicall.json";
 import { FACTORY_ADDRESS, MULTICALL_ADDRESS } from "../constants";
 import Card from "../components/Card";
-import {hex_to_ascii} from "../utils";
+import { hex_to_ascii } from "../utils";
 
-
+import CreateGridBtn from "../components/CreateGridBtn";
 
 const MyCollection = () => {
   const { connector, isConnected, address } = useAccount();
   const navigate = useNavigate();
   const [collectionAddresses, setCollectionAddresses] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const [pageCount, setPageCount] = useState<number>(10);
   const [listState, setListState] = useState<{
-    list: any[]
-    total: null | number
+    list: any[];
+    total: null | number;
   }>({
     list: [],
-    total: null
-  })
+    total: null,
+  });
 
   useEffect(() => {
     if (!isConnected && !address) {
       navigate("/");
     }
-    getUserCollections()
-        .catch((error) => console.error('failed to fetch user collections: ', error));
+    getUserCollections().catch((error) =>
+      console.error("failed to fetch user collections: ", error)
+    );
   }, [isConnected, address]);
 
   const getUserCollections = async () => {
+    setLoading(true);
     const provider = await connector?.getSigner();
-    const cf: Factory_abi = new Contract(FACTORY_ADDRESS, CFABI, provider) as Factory_abi;
+    const cf: Factory_abi = new Contract(
+      FACTORY_ADDRESS,
+      CFABI,
+      provider
+    ) as Factory_abi;
 
     if (address) {
       const collections = await cf.getUserCollections(address);
@@ -50,7 +57,8 @@ const MyCollection = () => {
       // getUserCollectionsDetails(collections)
       //     .catch((error) => console.error('failed to fetch user collections: ', error));
     }
-  }
+    setLoading(false);
+  };
 
   // const getUserCollectionsDetails = useCallback(async (cAddress: string[] = collectionAddresses) => {
   //   const provider = await connector?.getSigner()
@@ -114,12 +122,11 @@ const MyCollection = () => {
   // }, [collectionAddresses, listState]);
 
   return (
-    <div className="container m-auto my-4">
+    <div className={`container m-auto  ${loading ? "my-0" : "my-6"}`}>
+      {loading && <progress className="progress my-1"></progress>}
       <div className="flex justify-between items-center">
         <h3 className="text-3xl font-black">My Grids</h3>
-        <button className="py-2 px-4 text-lg w-max retro-btn">
-          Create a Grid
-        </button>
+        <CreateGridBtn />
       </div>
       {/*<InfiniteScroll*/}
       {/*    dataLength={listState.list.length}*/}
@@ -130,9 +137,7 @@ const MyCollection = () => {
       {/*>*/}
       <div className="my-8 grid grid-flow-row gap-6 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {collectionAddresses.map((c) => (
-            <Card
-                collection={c}
-            />
+          <Card collection={c} />
         ))}
       </div>
       {/*</InfiniteScroll>*/}

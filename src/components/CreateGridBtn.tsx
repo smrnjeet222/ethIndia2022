@@ -12,37 +12,45 @@ function CreateGridBtn() {
   const handleForm = async (e: any) => {
     e.preventDefault();
     setLoading(true);
-    let { name, sym, m, n } = e.target;
-    [name, sym, m, n] = [name.value, sym.value, m.value, n.value];
+    try {
+      let { name, sym, m, n } = e.target;
+      [name, sym, m, n] = [name.value, sym.value, m.value, n.value];
 
-    console.log({ name, sym, m, n });
+      console.log({ name, sym, m, n });
 
-    const signer = await connector?.getSigner();
+      const signer = await connector?.getSigner();
 
-    const contract = new Contract(FACTORY_ADDRESS, FACTORY_ABI as ContractInterface, signer);
+      const contract = new Contract(
+        FACTORY_ADDRESS,
+        FACTORY_ABI as ContractInterface,
+        signer
+      );
 
-    const createTx = await contract.createCollection(name, sym, m, n);
+      const createTx = await contract.createCollection(name, sym, m, n);
 
-    const txReceipt = await createTx.wait();
+      const txReceipt = await createTx.wait();
 
-    const collectionAddress = (
-      (txReceipt.events || []).find(
-        (e: { event: string }) => e.event === "CollectionCreated"
-      ) || { args: { Collection: null } }
-    ).args?.Collection;
+      const collectionAddress = (
+        (txReceipt.events || []).find(
+          (e: { event: string }) => e.event === "CollectionCreated"
+        ) || { args: { Collection: null } }
+      ).args?.Collection;
 
-    const collectionContract = new Contract(
-      collectionAddress,
-      COLLECTION_ABI as ContractInterface,
-      signer
-    );
+      const collectionContract = new Contract(
+        collectionAddress,
+        COLLECTION_ABI as ContractInterface,
+        signer
+      );
 
-    const setBaseUriTx = await collectionContract.setBaseURI(`demo.com`)
+      const setBaseUriTx = await collectionContract.setBaseURI(``);
 
-    await setBaseUriTx.wait();
+      await setBaseUriTx.wait();
 
-    setLoading(false);
-    window.location.reload();
+      setLoading(false);
+      window.location.reload();
+    } catch (err) {
+      console.error(err);
+    }
   };
   return (
     <>

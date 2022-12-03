@@ -23,7 +23,7 @@ const Home = () => {
         FACTORY_ABI as ContractInterface,
         signer
       );
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 10; i++) {
         try {
           const collection = await contract.collections(i);
           C_arr.push(collection)
