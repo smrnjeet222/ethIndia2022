@@ -12,7 +12,7 @@ const NFT_STORAGE_TOKEN = 'your-api-token'
 
 const client = createClient(
   getDefaultClient({
-    appName: "Grido",
+    appName: "Grid1",
     infuraId: INFURA_ID,
     autoConnect: true,
   })
