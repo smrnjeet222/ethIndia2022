@@ -61,7 +61,7 @@ const Home = () => {
       </div>
       <div className="my-8 grid grid-flow-row gap-6 text-neutral-600 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {collections.map((c) => (
-          <Card collection={c} />
+          <Card key={c} collection={c} />
         ))}
       </div>
     </div>

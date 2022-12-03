@@ -7,7 +7,10 @@ import COLLECTION_ABI from "../collection_abi.json";
 function Card({ collection }: any) {
   const { address, connector } = useAccount();
   const [data, setData] = useState<any>({});
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
+    setLoading(true);
     (async () => {
       const signer = await connector?.getSigner();
       const collectionContract = new Contract(
@@ -21,7 +24,12 @@ function Card({ collection }: any) {
       const parent = await collectionContract.Parent();
       const minted = await collectionContract.minted();
       const baseURI = await collectionContract.baseURI();
-      setData({ M, N, owner, parent, minted, baseURI });
+
+      const name = await collectionContract.name();
+      const sym = await collectionContract.symbol();
+
+      setData({ name, sym, M, N, owner, parent, minted, baseURI });
+      setLoading(false);
     })();
   }, [collection]);
 
@@ -34,15 +42,18 @@ function Card({ collection }: any) {
     >
       <figure>
         <img
-          src={data.baseURI || "/logo.png"}
-          className="rounded-t h-72 w-full object-cover"
+          src={loading ? "/loader.svg" : data.baseURI || "/logo.png"}
+          className="rounded-t h-72 w-full object-cover border-b-2 border-black"
         />
 
         <figcaption className="p-4">
+          <div className="flex items-center gap-3 mb-1">
+            <span className="text-2xl font-semibold">{data.name ?? " - "}</span> <span className="font-mono">({data.sym ?? " - "})</span>
+          </div>
           <p className="mb-2">
-            Size: {data.M} x {data.N}
+            Size: {data.M ?? "-"} x {data.N ?? "-"}
           </p>
-          
+
           <button
             onClick={(e) => e.preventDefault()}
             className="retro-btn w-full"

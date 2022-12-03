@@ -24,8 +24,10 @@ function CreateGridBtn() {
 
     await createTx.wait(1);
 
+    console.log(createTx);
+  
     setLoading(false);
-    window.location.reload();
+    // window.location.reload();
   };
   return (
     <>
