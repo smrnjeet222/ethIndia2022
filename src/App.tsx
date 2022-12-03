@@ -19,6 +19,8 @@ const client = createClient(
   })
 );
 
+export const FACTORY_ADDRESS = "0x14E85690f62E54e766A43c36330EAe64F58cB602"
+
 const nftStorageClient = new NFTStorage({ token: NFT_STORAGE_TOKEN })
 
 const App = () => {
