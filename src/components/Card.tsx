@@ -34,7 +34,7 @@ function Card(props: {
       variables: null,
     });
 
-    setMints(resp.data.mints);
+    setMints(resp.data.data.mints);
   }
 
   useEffect(() => {
