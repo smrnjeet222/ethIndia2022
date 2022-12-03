@@ -3,6 +3,7 @@ import { Contract, ContractInterface } from "ethers";
 import React, { useEffect, useState } from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import { useAccount } from "wagmi";
+import Block from "../components/block";
 import COLLECTION_ABI from "../contracts/collection_abi.json";
 
 function GridDetails() {
@@ -10,6 +11,37 @@ function GridDetails() {
   const { address, connector } = useAccount();
   const [data, setData] = useState<any>({});
   const [mints, setMints] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!collectionId) return;
+    try {
+      (async () => {
+        fetchMints()
+          .then(console.log)
+          .catch((error) => console.error("failed to fetch mints: ", error));
+
+        const signer = await connector?.getSigner();
+        const collectionContract = new Contract(
+          collectionId,
+          COLLECTION_ABI as ContractInterface,
+          signer
+        );
+
+        const M = (await collectionContract.M()).toString();
+        const N = (await collectionContract.N()).toString();
+        const owner = await collectionContract.Owner();
+        const parent = await collectionContract.Parent();
+        const minted = await collectionContract.minted();
+        const baseURI = await collectionContract.baseURI();
+
+        const name = await collectionContract.name();
+        const sym = await collectionContract.symbol();
+        setData({ name, sym, M, N, owner, parent, minted, baseURI });
+      })();
+    } catch (err) {
+      console.error(err);
+    }
+  }, [collectionId]);
 
   const fetchMints = async () => {
     const resp = await axios.post(
@@ -47,39 +79,6 @@ function GridDetails() {
     }
   };
 
-  useEffect(() => {
-    if (!collectionId) return;
-    try {
-      (async () => {
-        fetchMints()
-          .then(console.log)
-          .catch((error) => console.error("failed to fetch mints: ", error));
-
-        const signer = await connector?.getSigner();
-        const collectionContract = new Contract(
-          collectionId,
-          COLLECTION_ABI as ContractInterface,
-          signer
-        );
-
-        const M = (await collectionContract.M()).toString();
-        const N = (await collectionContract.N()).toString();
-        const owner = await collectionContract.Owner();
-        const parent = await collectionContract.Parent();
-        const minted = await collectionContract.minted();
-        const baseURI = await collectionContract.baseURI();
-
-        const name = await collectionContract.name();
-        const sym = await collectionContract.symbol();
-        setData({ name, sym, M, N, owner, parent, minted, baseURI });
-      })();
-    } catch (err) {
-      console.error(err);
-    }
-  }, [collectionId]);
-
-  console.log(data);
-
   if (!data.M || !data.N) return <progress className="progress"></progress>;
 
   return (
@@ -100,9 +99,7 @@ function GridDetails() {
         className="mx-auto w-2/3"
       >
         {[...Array(Number(data.M) * Number(data.N)).keys()].map((i) => (
-          <div key={i} className="border border-black p-5 aspect-square">
-            {i + 1}
-          </div>
+          <Block key={i} index={i} />
         ))}
       </div>
     </div>
