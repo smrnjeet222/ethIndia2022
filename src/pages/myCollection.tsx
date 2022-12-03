@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from "react";
 import { useAccount } from "wagmi";
 import { useNavigate } from "react-router-dom";
-import { Contract, utils } from "ethers";
-import InfiniteScroll from "react-infinite-scroll-component";
+import {Contract, utils} from 'ethers';
+// import InfiniteScroll from 'react-infinite-scroll-component';
 
-import { Factory_abi, Multicall } from "../contracts/types";
-import CFABI from "../contracts/factory_abi.json";
-import CABI from "../contracts/collection_abi.json";
-import MulticallABI from "../contracts/multicall.json";
+import { Factory_abi, Multicall } from '../contracts/types';
+import CFABI from '../contracts/factory_abi.json';
+// import CABI from '../contracts/collection_abi.json';
+// import MulticallABI from '../contracts/multicall.json';
 import { FACTORY_ADDRESS, MULTICALL_ADDRESS } from "../constants";
 import Card from "../components/Card";
-import { hex_to_ascii } from "../utils";
+import {hex_to_ascii} from "../utils";
 
 import CreateGridBtn from "../components/CreateGridBtn";
 
