@@ -3,9 +3,9 @@ import { Contract, ContractInterface } from "ethers";
 import { Fragment, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
-import { FACTORY_ADDRESS } from "../App";
-import COLLECTION_ABI from "../collection_abi.json";
-import FACTORY_ABI from "../factory_abi.json";
+import { FACTORY_ADDRESS } from "../constants";
+import COLLECTION_ABI from "../contracts/collection_abi.json";
+import FACTORY_ABI from "../contracts/factory_abi.json";
 
 export default function ForkItBtn({ collection }: any) {
   const [isOpen, setIsOpen] = useState(false);

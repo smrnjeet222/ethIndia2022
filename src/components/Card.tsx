@@ -1,19 +1,46 @@
+import axios from "axios";
 import { Contract, ContractInterface } from "ethers";
 import { useEffect, useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { useAccount } from "wagmi";
-import COLLECTION_ABI from "../collection_abi.json";
 import CreateGridBtn from "./CreateGridBtn";
 import ForkItBtn from "./ForkItBtn";
+import COLLECTION_ABI from "../contracts/collection_abi.json";
 
-function Card({ collection }: any) {
+function Card(props: {
+  collection: string
+  baseURI?: string
+  M?: string
+  N?: string
+  Name?: string
+  Symbol?: string
+}) {
+  const { collection, baseURI, M, N, Name, Symbol } = props;
   const { address, connector } = useAccount();
   const [data, setData] = useState<any>({});
   const [refetchTrigger, setRefetchTrigger] = useState(false);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [mints, setMints] = useState<any[]>([])
+
+  const fetchMints = async () => {
+    const resp = await axios.post('', {
+      query: `{
+        mints(where: { collection_: {  id: "${collection}" } }) {
+          id
+          tokenId
+        }
+      }`,
+      variables: null,
+    });
+
+    setMints(resp.data.mints);
+  }
 
   useEffect(() => {
+    if (Name) {
+      return;
+    }
     setLoading(true);
     (async () => {
       const signer = await connector?.getSigner();
@@ -61,13 +88,13 @@ function Card({ collection }: any) {
 
   return (
     <div
-      className="my-2 border-2 rounded-md border-black 
+      className="my-2 border-2 rounded-md border-black
       hover:scale-105 duration-300 overflow-hidden
       shadow-[0_3px_10px_rgb(0,0,0,0.2)]"
     >
       <figure>
         <img
-          src={loading ? "/loader.svg" : data.baseURI || "/logo.png"}
+          src={loading ? "/loader.svg" : baseURI || data.baseURI || "/logo.png"}
           className="cursor-pointer hover:scale-110 duration-300 w-full object-cover border-b-2 border-black"
           onClick={() => navigate(`/collection/${collection}`)}
         />
@@ -75,12 +102,12 @@ function Card({ collection }: any) {
         <figcaption className="p-4">
           <div className="flex items-center gap-3 mb-1">
             <span className="text-2xl font-semibold">
-              {data.name?.slice(0, 12) ?? " - "}
+              {(Name || data.name) ?? " - "}
             </span>{" "}
-            <span className="font-mono">({data.sym ?? " - "})</span>
+            <span className="font-mono">({(Symbol || data.sym) ?? " - "})</span>
           </div>
           <p className="mb-3">
-            Size: {data.M ?? "-"} x {data.N ?? "-"}
+            Size: {(M || data.M) ?? "-"} x {(N || data.N) ?? "-"}
           </p>
 
           {!data.name ? (
@@ -90,9 +117,14 @@ function Card({ collection }: any) {
           ) : address === data.owner ? (
             <button
               className="retro-btn w-full"
-              onClick={handleCompleteCollection}
+              onClick={(e) => {
+                if (!mints.length) {
+                  return navigate(`/collection/${collection}`);
+                }
+                handleCompleteCollection(e);
+              }}
             >
-              Complete Grid
+              {mints.length ? 'Complete Grid' : 'Upload More'}
             </button>
           ) : (
             <code className="leading-5 text-xs text-error">

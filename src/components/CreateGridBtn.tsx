@@ -1,9 +1,9 @@
 import { Contract, ContractInterface } from "ethers";
 import { useState } from "react";
 import { useAccount } from "wagmi";
-import { FACTORY_ADDRESS } from "../App";
-import COLLECTION_ABI from "../collection_abi.json";
-import FACTORY_ABI from "../factory_abi.json";
+import { FACTORY_ADDRESS } from "../constants";
+import COLLECTION_ABI from "../contracts/collection_abi.json";
+import FACTORY_ABI from "../contracts/factory_abi.json";
 
 function CreateGridBtn() {
   const { connector } = useAccount();
@@ -19,11 +19,7 @@ function CreateGridBtn() {
 
     const signer = await connector?.getSigner();
 
-    const contract = new Contract(
-      FACTORY_ADDRESS,
-      FACTORY_ABI as ContractInterface,
-      signer
-    );
+    const contract = new Contract(FACTORY_ADDRESS, FACTORY_ABI as ContractInterface, signer);
 
     const createTx = await contract.createCollection(name, sym, m, n);
 

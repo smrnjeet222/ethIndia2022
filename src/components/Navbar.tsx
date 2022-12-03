@@ -25,7 +25,7 @@ function Navbar() {
         <a className="uppercase text-4xl tracking-wider font-black">Grid1</a>
       </div>
       <div className="navbar-end">
-        <ConnectKitButton />
+        <ConnectKitButton  />
       </div>
     </div>
   );

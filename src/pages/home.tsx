@@ -1,8 +1,8 @@
 import { Contract, ContractInterface } from "ethers";
 import { useEffect, useState } from "react";
 import { useAccount } from "wagmi";
-import { FACTORY_ADDRESS } from "../App";
-import FACTORY_ABI from "../factory_abi.json";
+import { FACTORY_ADDRESS } from "../constants";
+import FACTORY_ABI from "../contracts/factory_abi.json";
 import Card from "../components/Card";
 import CreateGridBtn from "../components/CreateGridBtn";
 
