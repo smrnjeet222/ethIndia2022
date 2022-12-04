@@ -66,6 +66,7 @@ function Block({mint, baseURI, owner, collection, setError, index, updateMint}: 
                         filename: `${index}.json`,
                         tokenId: index,
                         name: file.name,
+                        key: `${index}.${filenamePart[filenamePart.length - 1]}`,
                         filetype: file.type,
                     }, {
                         headers: {
