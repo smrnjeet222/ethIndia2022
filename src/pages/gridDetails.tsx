@@ -3,14 +3,16 @@ import { Contract, ContractInterface } from "ethers";
 import React, {useCallback, useEffect, useState} from "react";
 import { Routes, Route, useParams } from "react-router-dom";
 import { useAccount } from "wagmi";
-import Block from "../components/block";
+import Block from "../components/Block";
 import COLLECTION_ABI from "../contracts/collection_abi.json";
+import { Collection_abi } from '../contracts/types'
 
 function GridDetails() {
   const { collectionId } = useParams();
   const { address, connector } = useAccount();
   const [data, setData] = useState<any>({});
   const [mints, setMints] = useState<any[]>([]);
+  const [error, setError] = useState<string|null>(null)
   const [parentCollections, setParentCollections] = useState<any[]>([]);
 
   useEffect(() => {
@@ -80,6 +82,30 @@ function GridDetails() {
     }
   };
 
+  const handleCompleteSetup = async (e: any) => {
+    e.preventDefault();
+    if (!collectionId) return;
+    const signer = await connector?.getSigner();
+
+    const collectionContract: Collection_abi = new Contract(
+      collectionId,
+      COLLECTION_ABI as ContractInterface,
+      signer
+    ) as Collection_abi;
+
+    try {
+      const baseURI = `https://eth-india.s3.ap-south-1.amazonaws.com/${address}/${collectionId}`
+      const setupTX = await collectionContract.setBaseURI(baseURI);
+      await setupTX.wait();
+      setData({
+        ...data,
+        baseURI,
+      })
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const fetchParent = useCallback((parent: string, otherParents: any[] = []) => {
     axios.post('https://api.thegraph.com/subgraphs/name/yashthakor/eth-india-grid1', {
       query: `{
@@ -112,6 +138,7 @@ function GridDetails() {
                 if (!mappedMints[Number(mint.tokenId)]) {
                   mappedMints[Number(mint.tokenId.toString())] = {
                     ...mint,
+                    owner: op.owner,
                     meta: `${op.baseUrl}/${mint.tokenId}.json`,
                   }
                 }
@@ -158,11 +185,26 @@ function GridDetails() {
     }
   }, [collectionId]);
 
+  const setMintDetails = useCallback((index: number, meta: string) => {
+    mints[index] = {
+      id: index.toString(),
+      tokenId: index.toString(),
+      meta
+    };
+    setMints([...mints]);
+  }, [mints]);
+
   useEffect(() => {
     if (data.N && data.M) {
       fetchParent(data.parent, []);
     }
   }, [data?.N, data?.M, data?.parent]);
+
+  useEffect(() => {
+    if (error) {
+      setTimeout(() => setError(null), 3000);
+    }
+  }, [error])
 
   console.log(data);
 
@@ -172,9 +214,17 @@ function GridDetails() {
     <div className="container m-auto my-4">
       {data.owner === address && (
         <div className="flex justify-center my-4 mb-8">
-          <button className="retro-btn" onClick={handleCompleteCollection}>
+          {data.baseURI && <button className="retro-btn" onClick={handleCompleteCollection}>
             Complete Grid
-          </button>
+          </button>}
+          {!data.baseURI && <button className="retro-btn" onClick={handleCompleteSetup}>
+            Complete Base URI setup
+          </button>}
+        </div>
+      )}
+      {error && (
+        <div className="flex justify-center my-4 mb-8 text-red-500">
+          {error}
         </div>
       )}
       <div
@@ -189,9 +239,17 @@ function GridDetails() {
           <div
               key={m?.tokenId || i}
               className="border border-black p-5 aspect-square"
-              // mint={m}
           >
-            <Block key={i} index={i} />
+            <Block
+                key={i}
+                owner={data.owner}
+                collection={collectionId}
+                baseURI={data.baseURI}
+                index={i}
+                mint={m}
+                updateMint={setMintDetails}
+                setError={setError}
+            />
           </div>
         ))}
       </div>
