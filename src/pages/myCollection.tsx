@@ -29,17 +29,19 @@ const MyCollection = () => {
   });
 
   useEffect(() => {
-    if (!isConnected && !address) {
-      navigate("/");
+    if (isConnected && address) {
+      getUserCollections().catch((error) =>
+          console.error("failed to fetch user collections: ", error)
+      );
     }
-    getUserCollections().catch((error) =>
-      console.error("failed to fetch user collections: ", error)
-    );
-  }, [isConnected, address]);
+  }, [isConnected, address, connector]);
 
   const getUserCollections = async () => {
     setLoading(true);
     const provider = await connector?.getSigner();
+    if (!provider) {
+      return;
+    }
     const cf: Factory_abi = new Contract(
       FACTORY_ADDRESS,
       CFABI,

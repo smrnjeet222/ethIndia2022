@@ -19,6 +19,7 @@ function Card(props: {
   const { address, connector } = useAccount();
   const [data, setData] = useState<any>({});
   const [refetchTrigger, setRefetchTrigger] = useState(false);
+  const [coverImage, setCoverImage] = useState<string>();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [mints, setMints] = useState<any[]>([])
@@ -61,6 +62,8 @@ function Card(props: {
       const name = await collectionContract.name();
       const sym = await collectionContract.symbol();
 
+
+
       setData({ name, sym, M, N, owner, parent, minted, baseURI });
       setLoading(false);
     })();
@@ -76,7 +79,7 @@ function Card(props: {
     >
       <figure>
         <img
-          src={loading ? "/loader.svg" : baseURI || data.baseURI || "/logo.png"}
+          src={loading ? "/loader.svg" : coverImage || "/logo.png"}
           className="cursor-pointer hover:scale-110 duration-300 w-full object-cover border-b-2 border-black"
           onClick={() => navigate(`/collection/${collection}`)}
         />
