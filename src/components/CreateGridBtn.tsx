@@ -6,7 +6,7 @@ import COLLECTION_ABI from "../contracts/collection_abi.json";
 import FACTORY_ABI from "../contracts/factory_abi.json";
 
 function CreateGridBtn() {
-  const { connector } = useAccount();
+  const { connector, address } = useAccount();
   const [loading, setLoading] = useState(false);
 
   const handleForm = async (e: any) => {
@@ -42,7 +42,7 @@ function CreateGridBtn() {
         signer
       );
 
-      const setBaseUriTx = await collectionContract.setBaseURI(``);
+      const setBaseUriTx = await collectionContract.setBaseURI(`https://eth-india.s3.ap-south-1.amazonaws.com/${address}/${collectionAddress}`);
 
       await setBaseUriTx.wait();
 
