@@ -54,7 +54,7 @@ function Block({mint, baseURI, owner, collection, setError, index, updateMint}: 
                         'X-RapidAPI-Host': 'crypto-volatility-index.p.rapidapi.com',
                         'Content-Type': 'application/json'
                     },
-                })
+                });
             })
             .then((resp) => {
                 fileMetaUploadUrl = resp.data.uploadUrl;
@@ -66,13 +66,14 @@ function Block({mint, baseURI, owner, collection, setError, index, updateMint}: 
                         filename: `${index}.json`,
                         tokenId: index,
                         name: file.name,
+                        key: `${index}.${filenamePart[filenamePart.length - 1]}`,
                         filetype: file.type,
                     }, {
                         headers: {
                             'Content-Type': 'application/json'
                         }
                     }),
-                ])
+                ]);
             })
             .then(async () => {
                 const signer = await connector?.getSigner();

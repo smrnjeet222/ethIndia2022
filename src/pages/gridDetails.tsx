@@ -16,7 +16,7 @@ function GridDetails() {
   const [parentCollections, setParentCollections] = useState<any[]>([]);
 
   useEffect(() => {
-    if (!collectionId) return;
+    if (!collectionId || !connector) return;
     try {
       (async () => {
         fetchMints()
@@ -44,7 +44,7 @@ function GridDetails() {
     } catch (err) {
       console.error(err);
     }
-  }, [collectionId]);
+  }, [collectionId, connector]);
 
   const fetchMints = async () => {
     const resp = await axios.post(

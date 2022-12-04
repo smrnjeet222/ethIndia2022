@@ -6,6 +6,7 @@ import { useAccount } from "wagmi";
 import CreateGridBtn from "./CreateGridBtn";
 import ForkItBtn from "./ForkItBtn";
 import COLLECTION_ABI from "../contracts/collection_abi.json";
+import { Collection_abi } from '../contracts/types';
 
 function Card(props: {
   collection: string
@@ -19,6 +20,7 @@ function Card(props: {
   const { address, connector } = useAccount();
   const [data, setData] = useState<any>({});
   const [refetchTrigger, setRefetchTrigger] = useState(false);
+  const [coverImage, setCoverImage] = useState<string>();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [mints, setMints] = useState<any[]>([])
@@ -61,12 +63,52 @@ function Card(props: {
       const name = await collectionContract.name();
       const sym = await collectionContract.symbol();
 
+
+
       setData({ name, sym, M, N, owner, parent, minted, baseURI });
       setLoading(false);
     })();
   }, [collection, refetchTrigger]);
 
+  const fetchAvailableMint = async () => {
+    const signer = await connector?.getSigner();
+    const collectionContract: Collection_abi = new Contract(
+        collection,
+        COLLECTION_ABI as ContractInterface,
+        signer
+    ) as Collection_abi;
+    let mint: string | null;
+    const maxMint = Number(data.M) * Number(data.N);
+    for (let i = 0; i < maxMint; i += 1) {
+      const mintJSON = await fetchFile(`${data.baseURI}/${i}.json`)
+      if (mintJSON.key) {
+        setCoverImage(`${data.baseURI}/${mintJSON.key}`);
+        break;
+      }
+    }
+  }
 
+  const fetchFile = (url: string) => {
+    return axios.get(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    })
+        .then((resp) => {
+          // setImageUrl once mint subgraph handler is fixed
+          return resp.data
+        })
+        .catch((error) => {
+          console.error('failed to fetch image meta: ', error)
+          return null
+        });
+  };
+
+  useEffect(() => {
+    if (connector && data.M && data.N) {
+      fetchAvailableMint()
+    }
+  }, [mints, data.M, data.N])
 
   return (
     <div
@@ -76,7 +118,7 @@ function Card(props: {
     >
       <figure>
         <img
-          src={loading ? "/loader.svg" : baseURI || data.baseURI || "/logo.png"}
+          src={loading ? "/loader.svg" : coverImage || "/logo.png"}
           className="cursor-pointer hover:scale-110 duration-300 w-full object-cover border-b-2 border-black"
           onClick={() => navigate(`/collection/${collection}`)}
         />
